@@ -136,9 +136,8 @@ class Ui_MainWindow(object):
         self.p_kh.setMaximum(300.0)
         self.p_kh.setProperty("value", -1.0)
         self.p_kh.setObjectName("p_kh")
-        self.plot_widget = QtQuickWidgets.QQuickWidget(self.centralwidget)
-        self.plot_widget.setGeometry(QtCore.QRect(9, 119, 581, 421))
-        self.plot_widget.setResizeMode(QtQuickWidgets.QQuickWidget.SizeRootObjectToView)
+        self.plot_widget = QtWidgets.QWidget(self.centralwidget)
+        self.plot_widget.setGeometry(QtCore.QRect(10, 120, 581, 421))
         self.plot_widget.setObjectName("plot_widget")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
@@ -179,4 +178,3 @@ class Ui_MainWindow(object):
         self.label_11.setText(_translate("MainWindow", "Aquarium Tank"))
         self.label_12.setText(_translate("MainWindow", "Parameter to Plot"))
 
-from PyQt5 import QtQuickWidgets

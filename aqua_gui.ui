@@ -456,17 +456,14 @@ NO3- ppm</string>
      <double>-1.000000000000000</double>
     </property>
    </widget>
-   <widget class="QQuickWidget" name="plot_widget">
+   <widget class="QWidget" name="plot_widget" native="true">
     <property name="geometry">
      <rect>
-      <x>9</x>
-      <y>119</y>
+      <x>10</x>
+      <y>120</y>
       <width>581</width>
       <height>421</height>
      </rect>
-    </property>
-    <property name="resizeMode">
-     <enum>QQuickWidget::SizeRootObjectToView</enum>
     </property>
    </widget>
   </widget>
@@ -482,13 +479,6 @@ NO3- ppm</string>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>QQuickWidget</class>
-   <extends>QWidget</extends>
-   <header>QtQuickWidgets/QQuickWidget</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>
