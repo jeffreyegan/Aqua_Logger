@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>A</class>
+ <widget class="QMainWindow" name="A">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Aqua Logger</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QComboBox" name="p_tank">
+    <property name="geometry">
+     <rect>
+      <x>420</x>
+      <y>30</y>
+      <width>171</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string extracomment="Select Tank..."/>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="p_method">
+    <property name="geometry">
+     <rect>
+      <x>700</x>
+      <y>40</y>
+      <width>81</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>Reagent</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Strip</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QDateTimeEdit" name="p_datetime">
+    <property name="geometry">
+     <rect>
+      <x>630</x>
+      <y>0</y>
+      <width>151</width>
+      <height>27</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="submit_parameters_button">
+    <property name="geometry">
+     <rect>
+      <x>640</x>
+      <y>530</y>
+      <width>141</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string> Submit Parameters</string>
+    </property>
+   </widget>
+   <widget class="QGraphicsView" name="logo">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>391</width>
+      <height>91</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>630</x>
+      <y>70</y>
+      <width>81</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Temperature
+Fahrenheit</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>630</x>
+      <y>120</y>
+      <width>81</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Acidity
+pH</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>630</x>
+      <y>220</y>
+      <width>81</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Nitrite
+NO2- ppm</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>630</x>
+      <y>170</y>
+      <width>81</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Ammonia
+NH3/NH4+</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_5">
+    <property name="geometry">
+     <rect>
+      <x>630</x>
+      <y>420</y>
+      <width>81</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>General H.
+ GH ppm</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_6">
+    <property name="geometry">
+     <rect>
+      <x>630</x>
+      <y>320</y>
+      <width>81</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Copper
+Cu+ ppm</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_7">
+    <property name="geometry">
+     <rect>
+      <x>630</x>
+      <y>370</y>
+      <width>81</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>TDS ppm</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_8">
+    <property name="geometry">
+     <rect>
+      <x>630</x>
+      <y>270</y>
+      <width>81</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Nitrate
+NO3- ppm</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_9">
+    <property name="geometry">
+     <rect>
+      <x>630</x>
+      <y>470</y>
+      <width>81</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Carbonate H.
+ KH ppm</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_10">
+    <property name="geometry">
+     <rect>
+      <x>630</x>
+      <y>30</y>
+      <width>81</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Method</string>
+    </property>
+   </widget>
+   <widget class="Line" name="line">
+    <property name="geometry">
+     <rect>
+      <x>600</x>
+      <y>10</y>
+      <width>20</width>
+      <height>531</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Vertical</enum>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_11">
+    <property name="geometry">
+     <rect>
+      <x>420</x>
+      <y>0</y>
+      <width>171</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Aquarium Tank</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_12">
+    <property name="geometry">
+     <rect>
+      <x>420</x>
+      <y>50</y>
+      <width>171</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Parameter to Plot</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="p_parameter">
+    <property name="geometry">
+     <rect>
+      <x>420</x>
+      <y>80</y>
+      <width>171</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string extracomment="Select Tank..."/>
+    </property>
+   </widget>
+   <widget class="QQuickWidget" name="quickWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>120</y>
+      <width>581</width>
+      <height>421</height>
+     </rect>
+    </property>
+    <property name="resizeMode">
+     <enum>QQuickWidget::SizeRootObjectToView</enum>
+    </property>
+   </widget>
+   <widget class="QDoubleSpinBox" name="p_tempf">
+    <property name="geometry">
+     <rect>
+      <x>720</x>
+      <y>80</y>
+      <width>65</width>
+      <height>31</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QDoubleSpinBox" name="p_ph">
+    <property name="geometry">
+     <rect>
+      <x>720</x>
+      <y>130</y>
+      <width>65</width>
+      <height>31</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QDoubleSpinBox" name="p_ammonia">
+    <property name="geometry">
+     <rect>
+      <x>720</x>
+      <y>180</y>
+      <width>65</width>
+      <height>31</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QDoubleSpinBox" name="p_nitrite">
+    <property name="geometry">
+     <rect>
+      <x>720</x>
+      <y>230</y>
+      <width>65</width>
+      <height>31</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QDoubleSpinBox" name="p_nitrate">
+    <property name="geometry">
+     <rect>
+      <x>720</x>
+      <y>280</y>
+      <width>65</width>
+      <height>31</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QDoubleSpinBox" name="p_cu">
+    <property name="geometry">
+     <rect>
+      <x>720</x>
+      <y>330</y>
+      <width>65</width>
+      <height>31</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QDoubleSpinBox" name="p_tds">
+    <property name="geometry">
+     <rect>
+      <x>720</x>
+      <y>380</y>
+      <width>65</width>
+      <height>31</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QDoubleSpinBox" name="p_gh">
+    <property name="geometry">
+     <rect>
+      <x>720</x>
+      <y>430</y>
+      <width>65</width>
+      <height>31</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QDoubleSpinBox" name="p_kh">
+    <property name="geometry">
+     <rect>
+      <x>720</x>
+      <y>480</y>
+      <width>65</width>
+      <height>31</height>
+     </rect>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>23</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QQuickWidget</class>
+   <extends>QWidget</extends>
+   <header>QtQuickWidgets/QQuickWidget</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
