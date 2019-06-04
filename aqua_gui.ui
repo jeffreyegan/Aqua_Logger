@@ -270,19 +270,6 @@ NO3- ppm</string>
      <string extracomment="Select Tank..."/>
     </property>
    </widget>
-   <widget class="QQuickWidget" name="quickWidget">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>120</y>
-      <width>581</width>
-      <height>421</height>
-     </rect>
-    </property>
-    <property name="resizeMode">
-     <enum>QQuickWidget::SizeRootObjectToView</enum>
-    </property>
-   </widget>
    <widget class="QDoubleSpinBox" name="p_tempf">
     <property name="geometry">
      <rect>
@@ -467,6 +454,19 @@ NO3- ppm</string>
     </property>
     <property name="value">
      <double>-1.000000000000000</double>
+    </property>
+   </widget>
+   <widget class="QQuickWidget" name="plot_widget">
+    <property name="geometry">
+     <rect>
+      <x>9</x>
+      <y>119</y>
+      <width>581</width>
+      <height>421</height>
+     </rect>
+    </property>
+    <property name="resizeMode">
+     <enum>QQuickWidget::SizeRootObjectToView</enum>
     </property>
    </widget>
   </widget>
