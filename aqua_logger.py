@@ -33,8 +33,9 @@ class aqua_logger(QtWidgets.QMainWindow):
         self.connect_to_database()
         self.list_tanks()
         self.list_parameters()
-        self.plot_data()
         self.ui.submit_parameters_button.clicked.connect(self.update_parameters)  # Submit Button
+        self.ui.p_parameter.currentIndexChanged.connect(self.plot_data)  # Change Parameter
+        self.ui.p_tank.currentIndexChanged.connect(self.plot_data)  # Change Parameter
 
     def update_time(self):  # update the date time object field in the GUI to present time (local)
         now = QtCore.QDateTime.currentDateTime()
@@ -83,7 +84,6 @@ class aqua_logger(QtWidgets.QMainWindow):
             "General Hardness": "GH ppm",
             "Carbonate Hardness": "KH ppm"
         }
-
         for key in self.tank_params:  # for key in dict, additem to drop down
             self.ui.p_parameter.addItem(key)
         self.ui.p_tank.setCurrentIndex(0)
@@ -96,10 +96,28 @@ class aqua_logger(QtWidgets.QMainWindow):
         self.tank_id = int(rows[0][0])
 
         # parameter data to plot
-        q = "SELECT "+str(self.tank_params[self.ui.p_parameter.currentText()])+" FROM measurements WHERE tank_id == "+str(self.tank_id)
+        print(str(self.tank_params[self.ui.p_parameter.currentText()]))
+        q = "SELECT measurement_time, "+str(self.tank_params[self.ui.p_parameter.currentText()])+" FROM measurements WHERE tank_id == "+str(self.tank_id)
         #TODO eventually needs some time bounding on the query or no recent data will be seen
         self.cur.execute(q)
-        rows = self.cur.fetchall()
+        plot_data = self.cur.fetchall()
+
+        '''fig_dpi = 120  # figure resolution in dots per inch
+        fig= Figure(figsize=(581/fig_dpi,421/fig_dpi), dpi=fig_dpi, facecolor='#505050', edgecolor='#505050')
+        ax1f1 = fig.add_subplot(111)
+        ax1f1.set_title(str(self.ui.p_tank.currentText())+" - "+str(self.ui.p_parameter.currentText()))
+        ax1f1.set_ylabel(self.param_units[self.ui.p_parameter.currentText()])
+        ax1f1.set_xlabel("Date and Time")
+        x_data = []
+        y_data = []
+        for row in plot_data:
+            x_data.append(row[0])
+            y_data.append(row[1])
+        print(x_data)
+        print(y_data)
+        ax1f1.plot(x_data, y_data)'''
+
+
 
         fig_dpi = 120  # figure resolution in dots per inch
         fig = Figure(figsize=(581/fig_dpi,421/fig_dpi), dpi=fig_dpi, facecolor='#505050', edgecolor='#505050')
@@ -107,13 +125,13 @@ class aqua_logger(QtWidgets.QMainWindow):
         ax1f1.set_title(str(self.ui.p_tank.currentText())+" - "+str(self.ui.p_parameter.currentText()))
         ax1f1.set_ylabel(self.param_units[self.ui.p_parameter.currentText()])
         ax1f1.set_xlabel("Date and Time")
-        ax1f1.plot(np.random.rand(5))  #TODO change this to real plot
-
+        ax1f1.plot(np.random.rand(5)) #TODO change this to real plot
 
         self.canvas = FigureCanvas(fig)
-        self.canvas.draw() 
+        self.canvas.draw()
         self.canvas.setParent(self.ui.plot_widget)
 
+        
     def add_measurement(self):  # add measurement data to the sqlite database file
         q = "SELECT tank_id FROM tanks WHERE tank_name == \""+str(self.ui.p_tank.currentText())+"\""
         self.cur.execute(q)
