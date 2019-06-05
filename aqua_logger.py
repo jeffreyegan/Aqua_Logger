@@ -18,6 +18,8 @@ else:
         FigureCanvas, NavigationToolbar2QT as NavigationToolbar)
 from matplotlib.figure import Figure
 import seaborn as sns
+sns.set(style="darkgrid")
+palette = sns.color_palette("mako_r", 6)
 
 
 # pyuic5 aqua_gui.ui -o aqua_logger_gui.py  # run this on updated *.ui files before executing this main script
@@ -33,10 +35,17 @@ class aqua_logger(QtWidgets.QMainWindow):
         self.connect_to_database()
         self.list_tanks()
         self.list_parameters()
+
+        self.fig_dpi = 120  # figure resolution in dots per inch
+        self.fig = Figure(figsize=(581/self.fig_dpi,421/self.fig_dpi), dpi=self.fig_dpi, facecolor='#505050', edgecolor='#505050')
+        self.canvas = FigureCanvas(self.fig)
+        self.canvas.setParent(self.ui.plot_widget)
+
         self.refresh_plot()
         self.ui.submit_parameters_button.clicked.connect(self.update_parameters)  # Submit Button
         self.ui.p_parameter.currentIndexChanged.connect(self.refresh_plot)  # Change Parameter
-        self.ui.p_tank.currentIndexChanged.connect(self.refresh_plot)  # Change Parameter
+        self.ui.p_tank.currentIndexChanged.connect(self.refresh_plot)  # Change Tank
+        #self.about()
 
     def update_time(self):  # update the date time object field in the GUI to present time (local)
         now = QtCore.QDateTime.currentDateTime()
@@ -90,6 +99,7 @@ class aqua_logger(QtWidgets.QMainWindow):
         self.ui.p_tank.setCurrentIndex(0)
 
     def refresh_plot(self):
+        self.ui.plot_widget.update()
         # tank id to plot data for
         q = "SELECT tank_id FROM tanks WHERE tank_name == \""+str(self.ui.p_tank.currentText())+"\""
         self.cur.execute(q)
@@ -103,12 +113,6 @@ class aqua_logger(QtWidgets.QMainWindow):
         self.cur.execute(q)
         plot_data = self.cur.fetchall()
 
-        fig_dpi = 120  # figure resolution in dots per inch
-        fig= Figure(figsize=(581/fig_dpi,421/fig_dpi), dpi=fig_dpi, facecolor='#505050', edgecolor='#505050')
-        ax1f1 = fig.add_subplot(111)
-        ax1f1.set_title(str(self.ui.p_tank.currentText())+" - "+str(self.ui.p_parameter.currentText()))
-        ax1f1.set_ylabel(self.param_units[self.ui.p_parameter.currentText()])
-        ax1f1.set_xlabel("Date and Time")
         x_data = []
         y_data = []
         for row in plot_data:
@@ -116,12 +120,15 @@ class aqua_logger(QtWidgets.QMainWindow):
             y_data.append(row[1])
         print(x_data)
         print(y_data)
+
+        ax1f1 = self.fig.add_subplot(111)
+        ax1f1.set_title(str(self.ui.p_tank.currentText())+" - "+str(self.ui.p_parameter.currentText()))
+        ax1f1.set_ylabel(self.param_units[self.ui.p_parameter.currentText()])
+        ax1f1.set_xlabel("Date and Time")
         ax1f1.plot(x_data, y_data)
 
-        self.canvas = FigureCanvas(fig)
         self.canvas.draw()
-        self.canvas.setParent(self.ui.plot_widget)
-
+        self.ui.plot_widget.repaint()
         
     def add_measurement(self):  # add measurement data to the sqlite database file
         q = "SELECT tank_id FROM tanks WHERE tank_name == \""+str(self.ui.p_tank.currentText())+"\""
@@ -136,10 +143,12 @@ class aqua_logger(QtWidgets.QMainWindow):
         #TODO still need to handle nulls better, instead of 0 s
         self.cur.execute(q)
         self.conn.commit()
-        self.plot_data()
+        self.refresh_plot()
 
         self.update_time()
 
+    def about(self):
+        QtWidgets.QMessageBox.about(self, "About", "Open Source Aquarium Water Paramter Tracking tool written by Jeffrey Egan. 2019")
 
 
 app = QtWidgets.QApplication([])
