@@ -1,5 +1,5 @@
-import sys, os
-from PyQt5 import QtWidgets, QtCore, uic
+import sys, os, math
+from PyQt5 import QtWidgets, QtCore, QtGui, uic
 import sqlite3
 #from datetime import datetime
 from aqua_logger_gui import Ui_MainWindow
@@ -40,10 +40,13 @@ class aqua_logger(QtWidgets.QMainWindow):
         self.list_parameters()
 
         self.fig_dpi = 120  # figure resolution in dots per inch
-        self.fig = Figure(figsize=(581/self.fig_dpi,421/self.fig_dpi), dpi=self.fig_dpi, facecolor='#505050', edgecolor='#505050')
+        self.fig = Figure(figsize=(581/self.fig_dpi,421/self.fig_dpi), dpi=self.fig_dpi, facecolor='#31363b', edgecolor='#31363b')
         self.ax1 = self.fig.add_subplot(111)
         self.canvas = FigureCanvas(self.fig)
         self.canvas.setParent(self.ui.plot_widget)
+
+        self.img = QtGui.QPixmap("aqua_logger_logo.png")  # TODO work here
+        self.ui.logo.addItem(self.pic)
 
         self.refresh_plot()
         self.ui.submit_parameters_button.clicked.connect(self.update_parameters)  # Submit Button
@@ -118,11 +121,14 @@ class aqua_logger(QtWidgets.QMainWindow):
 
         self.ax1.clear()
         sns.lineplot(x="measurement_time", y=str(self.tank_params[self.ui.p_parameter.currentText()]), data=plot_df, palette=palette, ax=self.ax1)
-        self.ax1.set_title(str(self.ui.p_tank.currentText())+" - "+str(self.ui.p_parameter.currentText()))
-        self.ax1.set_ylabel(self.param_units[self.ui.p_parameter.currentText()])
+        self.ax1.set_title(str(self.ui.p_tank.currentText())+" - "+str(self.ui.p_parameter.currentText()), color="white")
+        self.ax1.set_ylabel(self.param_units[self.ui.p_parameter.currentText()], color="white")
+        self.ax1.set_xlabel("Date of Data Record", color="white")
         plot_df['time_label'] = plot_df['measurement_time'].apply(lambda x: str(x.split("/")[0])+"/"+str(x.split("/")[1]))
         xlabels = plot_df['time_label']
-        self.ax1.set_xticklabels(xlabels, rotation=0)
+        ylabels = np.linspace(math.floor(min(plot_df[str(self.tank_params[self.ui.p_parameter.currentText()])])), math.ceil(max(plot_df[str(self.tank_params[self.ui.p_parameter.currentText()])])), 5)
+        self.ax1.set_xticklabels(xlabels, rotation=0, color="white")
+        self.ax1.tick_params(axis="y", colors="white")
 
         self.canvas.draw()
         self.ui.plot_widget.repaint()
