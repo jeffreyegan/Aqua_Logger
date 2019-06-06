@@ -4,6 +4,7 @@ import sqlite3
 #from datetime import datetime
 from aqua_logger_gui import Ui_MainWindow
 import numpy as np
+import pandas as pd
 import random, time
 
 
@@ -19,6 +20,8 @@ else:
 from matplotlib.figure import Figure
 import seaborn as sns
 sns.set(style="darkgrid")
+sns.axes_style({'text.color': '0.99'})
+sns.set_context("notebook", font_scale=0.65, rc={"lines.linewidth": 1.0})
 palette = sns.color_palette("mako_r", 6)
 
 
@@ -38,6 +41,7 @@ class aqua_logger(QtWidgets.QMainWindow):
 
         self.fig_dpi = 120  # figure resolution in dots per inch
         self.fig = Figure(figsize=(581/self.fig_dpi,421/self.fig_dpi), dpi=self.fig_dpi, facecolor='#505050', edgecolor='#505050')
+        self.ax1 = self.fig.add_subplot(111)
         self.canvas = FigureCanvas(self.fig)
         self.canvas.setParent(self.ui.plot_widget)
 
@@ -108,24 +112,17 @@ class aqua_logger(QtWidgets.QMainWindow):
 
         # parameter data to plot
         print(str(self.tank_params[self.ui.p_parameter.currentText()]))
-        q = "SELECT measurement_time, "+str(self.tank_params[self.ui.p_parameter.currentText()])+" FROM measurements WHERE tank_id == "+str(self.tank_id)
+        q = "SELECT * FROM ( SELECT measurement_time, "+str(self.tank_params[self.ui.p_parameter.currentText()])+" FROM measurements WHERE tank_id == "+str(self.tank_id)+" ORDER BY measurement_id DESC LIMIT 10) ORDER BY measurement_time ASC"
         #TODO eventually needs some time bounding on the query or no recent data will be seen
-        self.cur.execute(q)
-        plot_data = self.cur.fetchall()
+        plot_df = pd.read_sql_query(q, self.conn)
 
-        x_data = []
-        y_data = []
-        for row in plot_data:
-            x_data.append(row[0])
-            y_data.append(row[1])
-        print(x_data)
-        print(y_data)
-
-        ax1f1 = self.fig.add_subplot(111)
-        ax1f1.set_title(str(self.ui.p_tank.currentText())+" - "+str(self.ui.p_parameter.currentText()))
-        ax1f1.set_ylabel(self.param_units[self.ui.p_parameter.currentText()])
-        ax1f1.set_xlabel("Date and Time")
-        ax1f1.plot(x_data, y_data)
+        self.ax1.clear()
+        sns.lineplot(x="measurement_time", y=str(self.tank_params[self.ui.p_parameter.currentText()]), data=plot_df, palette=palette, ax=self.ax1)
+        self.ax1.set_title(str(self.ui.p_tank.currentText())+" - "+str(self.ui.p_parameter.currentText()))
+        self.ax1.set_ylabel(self.param_units[self.ui.p_parameter.currentText()])
+        plot_df['time_label'] = plot_df['measurement_time'].apply(lambda x: str(x.split("/")[0])+"/"+str(x.split("/")[1]))
+        xlabels = plot_df['time_label']
+        self.ax1.set_xticklabels(xlabels, rotation=0)
 
         self.canvas.draw()
         self.ui.plot_widget.repaint()
