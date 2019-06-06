@@ -481,9 +481,9 @@ NO3- ppm</string>
    <widget class="QWidget" name="plot_widget" native="true">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>30</x>
       <y>120</y>
-      <width>581</width>
+      <width>561</width>
       <height>421</height>
      </rect>
     </property>

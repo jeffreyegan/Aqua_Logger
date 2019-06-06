@@ -146,7 +146,7 @@ class Ui_MainWindow(object):
         self.p_kh.setProperty("value", -1.0)
         self.p_kh.setObjectName("p_kh")
         self.plot_widget = QtWidgets.QWidget(self.centralwidget)
-        self.plot_widget.setGeometry(QtCore.QRect(10, 120, 581, 421))
+        self.plot_widget.setGeometry(QtCore.QRect(30, 120, 561, 421))
         self.plot_widget.setObjectName("plot_widget")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
