@@ -61,7 +61,7 @@ class aqua_logger(QtWidgets.QMainWindow):
         self.label.setPixmap(self.pixmap)
         self.label.setParent(self.ui.logo)
 
-        self.ui.submit_parameters_button.clicked.connect(self.update_parameters)  # Submit Button
+        self.ui.submit_parameters_button.clicked.connect(self.add_measurement)  # Submit Button
         self.ui.p_parameter.currentIndexChanged.connect(self.refresh_plot)  # Change Parameter
         self.ui.p_tank.currentIndexChanged.connect(self.refresh_plot)  # Change Tank
         self.refresh_plot()
@@ -70,11 +70,6 @@ class aqua_logger(QtWidgets.QMainWindow):
     def update_time(self):  # update the date time object field in the GUI to present time (local)
         now = QtCore.QDateTime.currentDateTime()
         self.ui.p_datetime.setDateTime(now)
-
-    def update_parameters(self):  # methods to call when update parameters button is pushed by user
-        self.ui.p_ph.setValue(7.9)
-        self.update_time()
-        self.add_measurement()
 
     def connect_to_database(self):  # connect to the sqlite database file
         db_file = "aqua_data.db"
@@ -117,8 +112,23 @@ class aqua_logger(QtWidgets.QMainWindow):
         for key in self.tank_params:  # for key in dict, additem to drop down
             self.ui.p_parameter.addItem(key)
         self.ui.p_tank.setCurrentIndex(0)
+        self.gh_kh_reagent = {  # dictionary to map the # of drops reagent to ppm
+            "1.0": "17.9",
+            "2.0": "35.8",
+            "3.0": "53.7",
+            "4.0": "71.6",
+            "5.0": "89.5",
+            "6.0": "107.4",
+            "7.0": "125.3",
+            "8": "143.2",
+            "9.0": "161.1",
+            "10.0": "179.0",
+            "11.0": "196.9",
+            "12.0": "214.8",
+            "-1.0": "-1.0"
+        }
 
-    def refresh_plot(self):
+    def refresh_plot(self):  # refreshes the GUI plot based on tank or parameter selection update by user
         self.ui.plot_widget.update()
         # tank id to plot data for
         q = "SELECT tank_id FROM tanks WHERE tank_name == \""+str(self.ui.p_tank.currentText())+"\""
@@ -152,8 +162,16 @@ class aqua_logger(QtWidgets.QMainWindow):
         rows = self.cur.fetchall()
         self.tank_id = int(rows[0][0])
         dt_string = self.ui.p_datetime.dateTime().toString(self.ui.p_datetime.displayFormat())  # mm/dd/yy hh:mm"
-        q = ("INSERT INTO measurements (tank_id, measurement_time, method, temp_f, temp_c, pH, ammonia, nitrite, nitrate, copper, tds, gh, kh) " + 
-        "VALUES ("+str(self.tank_id)+", \""+dt_string+"\", \""+str(self.ui.p_method.currentText())+"\", "+str(self.ui.p_tempf.value())+", "+str((self.ui.p_tempf.value()-32.0)*5.0/9.0)+", "+str(self.ui.p_ph.value())+", "+str(self.ui.p_ammonia.value())+", "+str(self.ui.p_nitrite.value())+", "+str(self.ui.p_nitrate.value())+", "+str(self.ui.p_cu.value())+", "+str(self.ui.p_tds.value())+", "+str(self.ui.p_gh.value())+", "+str(self.ui.p_kh.value())+")")
+
+        if str(self.ui.p_method.currentText()) == "Strip":  # if reagent, 
+            q = ("INSERT INTO measurements (tank_id, measurement_time, method, temp_f, temp_c, pH, ammonia, nitrite, nitrate, copper, tds, gh, kh) " + 
+            "VALUES ("+str(self.tank_id)+", \""+dt_string+"\", \""+str(self.ui.p_method.currentText())+"\", "+str(self.ui.p_tempf.value())+", "+str((self.ui.p_tempf.value()-32.0)*5.0/9.0)+", "+str(self.ui.p_ph.value())+", "+str(self.ui.p_ammonia.value())+", "+str(self.ui.p_nitrite.value())+", "+str(self.ui.p_nitrate.value())+", "+str(self.ui.p_cu.value())+", "+str(self.ui.p_tds.value())+", "+str(self.ui.p_gh.value())+", "+str(self.ui.p_kh.value())+")")
+        else:
+            gh = self.gh_kh_reagent[str(self.ui.p_gh.value())]
+            kh = self.gh_kh_reagent[str(self.ui.p_kh.value())]
+            q = ("INSERT INTO measurements (tank_id, measurement_time, method, temp_f, temp_c, pH, ammonia, nitrite, nitrate, copper, tds, gh, kh) " + 
+            "VALUES ("+str(self.tank_id)+", \""+dt_string+"\", \""+str(self.ui.p_method.currentText())+"\", "+str(self.ui.p_tempf.value())+", "+str((self.ui.p_tempf.value()-32.0)*5.0/9.0)+", "+str(self.ui.p_ph.value())+", "+str(self.ui.p_ammonia.value())+", "+str(self.ui.p_nitrite.value())+", "+str(self.ui.p_nitrate.value())+", "+str(self.ui.p_cu.value())+", "+str(self.ui.p_tds.value())+", "+str(gh)+", "+str(kh)+")")
+
         self.cur.execute(q)
         self.conn.commit()
         self.set_nulls()
@@ -164,6 +182,8 @@ class aqua_logger(QtWidgets.QMainWindow):
     def set_nulls(self):  # replace -1.0 values with NULLs
         for key, value in self.tank_params.items():
             q = "UPDATE measurements SET "+str(value)+" = NULL where "+str(value)+" = -1.0;"
+            self.cur.execute(q)
+            q = "UPDATE measurements SET temp_c = NULL where temp_f IS NULL;"
             self.cur.execute(q)
             self.conn.commit()
 
