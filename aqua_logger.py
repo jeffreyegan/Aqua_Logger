@@ -1,3 +1,13 @@
+#!/usr/bin/env python
+__author__ = "Jeffrey Egan"
+__copyright__ = "Copyright 2019, dragonaur.io"
+__credits__ = ["Jeffrey Egan"]
+__license__ = "Apache 2.0"
+__version__ = "1.0.0"
+__maintainer__ = "Rob Knight"
+__email__ = "jeffrey.a.egan@gmail.com"
+__status__ = "Released"
+
 import sys, os, math
 from PyQt5 import QtWidgets, QtCore, QtGui, uic
 import sqlite3
@@ -26,8 +36,9 @@ palette = sns.color_palette("mako_r", 6)
 
 
 # pyuic5 aqua_gui.ui -o aqua_logger_gui.py  # run this on updated *.ui files before executing this main script
+# convert -strip input.png output.png  # run on images to address any PNG lib errors
 
-#TODO icon, plot, nulls, logo, bounds for parameters to tanks table and plot
+#TODO nulls, bounds for parameters to tanks table and plot
 
 class aqua_logger(QtWidgets.QMainWindow):
     def __init__(self):
@@ -45,8 +56,10 @@ class aqua_logger(QtWidgets.QMainWindow):
         self.canvas = FigureCanvas(self.fig)
         self.canvas.setParent(self.ui.plot_widget)
 
-        self.img = QtGui.QPixmap("aqua_logger_logo.png")  # TODO work here
-        self.ui.logo.addItem(self.pic)
+        self.label = QtWidgets.QLabel(self)
+        self.pixmap = QtGui.QPixmap("aqua_logger_logo_o.png")  # TODO work here
+        self.label.setPixmap(self.pixmap)
+        self.label.setParent(self.ui.logo)
 
         self.refresh_plot()
         self.ui.submit_parameters_button.clicked.connect(self.update_parameters)  # Submit Button
@@ -114,9 +127,7 @@ class aqua_logger(QtWidgets.QMainWindow):
         self.tank_id = int(rows[0][0])
 
         # parameter data to plot
-        print(str(self.tank_params[self.ui.p_parameter.currentText()]))
         q = "SELECT * FROM ( SELECT measurement_time, "+str(self.tank_params[self.ui.p_parameter.currentText()])+" FROM measurements WHERE tank_id == "+str(self.tank_id)+" ORDER BY measurement_id DESC LIMIT 10) ORDER BY measurement_time ASC"
-        #TODO eventually needs some time bounding on the query or no recent data will be seen
         plot_df = pd.read_sql_query(q, self.conn)
 
         self.ax1.clear()
@@ -143,7 +154,6 @@ class aqua_logger(QtWidgets.QMainWindow):
         q = ("INSERT INTO measurements (tank_id, measurement_time, method, temp_f, temp_c, pH, ammonia, nitrite, nitrate, copper, tds, gh, kh) " + 
         "VALUES ("+str(self.tank_id)+", \""+dt_string+"\", \""+str(self.ui.p_method.currentText())+"\", "+str(self.ui.p_tempf.value())+", "+str((self.ui.p_tempf.value()-32.0)*5.0/9.0)+", "+str(self.ui.p_ph.value())+", "+str(self.ui.p_ammonia.value())+", "+str(self.ui.p_nitrite.value())+", "+str(self.ui.p_nitrate.value())+", "+str(self.ui.p_cu.value())+", "+str(self.ui.p_tds.value())+", "+str(self.ui.p_gh.value())+", "+str(self.ui.p_kh.value())+")")
         print(q)
-        #TODO still need to handle nulls better, instead of 0 s
         self.cur.execute(q)
         self.conn.commit()
         self.refresh_plot()

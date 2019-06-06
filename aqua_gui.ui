@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Aqua Logger</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>aqua_ico24.png</normaloff>aqua_ico24.png</iconset>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QComboBox" name="p_tank">
     <property name="geometry">
@@ -78,6 +82,24 @@
       <width>391</width>
       <height>91</height>
      </rect>
+    </property>
+    <property name="backgroundBrush">
+     <brush brushstyle="NoBrush">
+      <color alpha="255">
+       <red>49</red>
+       <green>54</green>
+       <blue>59</blue>
+      </color>
+     </brush>
+    </property>
+    <property name="foregroundBrush">
+     <brush brushstyle="NoBrush">
+      <color alpha="255">
+       <red>49</red>
+       <green>54</green>
+       <blue>59</blue>
+      </color>
+     </brush>
     </property>
    </widget>
    <widget class="QLabel" name="label">
