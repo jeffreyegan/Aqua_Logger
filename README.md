@@ -1,4 +1,5 @@
 # Aqua Logger
-Python GUI tool to log and plot aquarium water parameters over time within multiple tanks.
+Python GUI tool to log and plot aquarium water parameters over time for multiple fish tanks.
 
-Please see the wiki for more information: https://github.com/jeffreyegan/Aqua_Logger/wiki
+![Aqua Logger Screenshot](https://github.com/jeffreyegan/Aqua_Logger/blob/master/Aqua_Logger_Screenshot.png)
+
